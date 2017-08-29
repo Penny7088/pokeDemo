@@ -159,7 +159,7 @@ cc.game.onStart = function () {
     ];
     cc.LoaderScene.preload(loginRes, function () {
         cc.spriteFrameCache.addSpriteFrames("res/login/loading.plist", "res/login/loading.png");
-        cc.director.runScene(new UIMain());
+        cc.director.runScene(UIMainLogin.scene());
     }, this);
 };
 cc.game.run();
