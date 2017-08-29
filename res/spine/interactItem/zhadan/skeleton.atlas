@@ -1,0 +1,41 @@
+
+skeleton.png
+size: 512,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+1
+  rotate: false
+  xy: 253, 205
+  size: 140, 99
+  orig: 140, 99
+  offset: 0, 0
+  index: -1
+1-zhadan0
+  rotate: false
+  xy: 253, 306
+  size: 156, 168
+  orig: 166, 180
+  offset: 7, 11
+  index: -1
+1-zhadan1
+  rotate: false
+  xy: 2, 2
+  size: 166, 180
+  orig: 166, 180
+  offset: 0, 0
+  index: -1
+1-zhadan2
+  rotate: false
+  xy: 170, 135
+  size: 72, 47
+  orig: 166, 180
+  offset: 49, 70
+  index: -1
+bomb_34
+  rotate: false
+  xy: 2, 184
+  size: 249, 290
+  orig: 350, 470
+  offset: 45, 18
+  index: -1

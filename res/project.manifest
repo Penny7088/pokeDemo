@@ -1,0 +1,11 @@
+{
+    "packageUrl" : "http://mobile.guandanyouxi.com/res",
+    "remoteManifestUrl" : "http://mobile.guandanyouxi.com/res/project.manifest",
+    "remoteVersionUrl" : "http://mobile.guandanyouxi.com/res/version.manifest",
+    "version" : "1.0.0",
+    "engineVersion" : "Cocos2d-JS v3.6.1",
+
+    "searchPaths" : [
+		"res/"
+    ]
+}

@@ -1,0 +1,118 @@
+
+skeleton.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+Aliandui
+  rotate: false
+  xy: 291, 883
+  size: 287, 101
+  orig: 315, 137
+  offset: 14, 18
+  index: -1
+Asanshun
+  rotate: false
+  xy: 580, 883
+  size: 287, 101
+  orig: 315, 137
+  offset: 14, 18
+  index: -1
+Ashunzi
+  rotate: false
+  xy: 2, 781
+  size: 287, 101
+  orig: 315, 138
+  offset: 14, 19
+  index: -1
+Atonghua
+  rotate: false
+  xy: 2, 884
+  size: 287, 100
+  orig: 311, 124
+  offset: 12, 14
+  index: -1
+Bguang0
+  rotate: false
+  xy: 604, 744
+  size: 315, 137
+  orig: 315, 137
+  offset: 0, 0
+  index: -1
+Bguang1
+  rotate: false
+  xy: 2, 618
+  size: 315, 137
+  orig: 315, 137
+  offset: 0, 0
+  index: -1
+Bguang2
+  rotate: false
+  xy: 319, 465
+  size: 315, 138
+  orig: 315, 138
+  offset: 0, 0
+  index: -1
+Bguang3
+  rotate: false
+  xy: 291, 757
+  size: 311, 124
+  orig: 311, 124
+  offset: 0, 0
+  index: -1
+Cliandui beiguang
+  rotate: false
+  xy: 319, 605
+  size: 315, 137
+  orig: 315, 137
+  offset: 0, 0
+  index: -1
+Csanshun beiguang
+  rotate: false
+  xy: 636, 605
+  size: 315, 137
+  orig: 315, 137
+  offset: 0, 0
+  index: -1
+Cshunzi beiguang
+  rotate: false
+  xy: 636, 465
+  size: 315, 138
+  orig: 315, 138
+  offset: 0, 0
+  index: -1
+Ctonghuashun beiguang
+  rotate: false
+  xy: 2, 479
+  size: 315, 137
+  orig: 315, 137
+  offset: 0, 0
+  index: -1
+Dshexian1
+  rotate: false
+  xy: 2, 237
+  size: 436, 226
+  orig: 436, 231
+  offset: 0, 5
+  index: -1
+Dshexian2
+  rotate: false
+  xy: 440, 237
+  size: 436, 226
+  orig: 436, 233
+  offset: 0, 7
+  index: -1
+Dshexian3
+  rotate: false
+  xy: 2, 9
+  size: 436, 226
+  orig: 436, 234
+  offset: 0, 8
+  index: -1
+Dshexian4
+  rotate: false
+  xy: 440, 2
+  size: 436, 233
+  orig: 436, 233
+  offset: 0, 0
+  index: -1

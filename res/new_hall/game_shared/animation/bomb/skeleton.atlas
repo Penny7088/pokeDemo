@@ -1,0 +1,90 @@
+
+skeleton.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+baozha
+  rotate: false
+  xy: 2, 442
+  size: 406, 238
+  orig: 406, 238
+  offset: 0, 0
+  index: -1
+guangbaozha
+  rotate: false
+  xy: 458, 587
+  size: 249, 145
+  orig: 249, 145
+  offset: 0, 0
+  index: -1
+guangjian
+  rotate: false
+  xy: 2, 682
+  size: 454, 305
+  orig: 454, 305
+  offset: 0, 0
+  index: -1
+guangxiao
+  rotate: false
+  xy: 2, 180
+  size: 331, 260
+  orig: 331, 260
+  offset: 0, 0
+  index: -1
+guangxiao2
+  rotate: false
+  xy: 335, 185
+  size: 255, 255
+  orig: 308, 277
+  offset: 25, 10
+  index: -1
+heizhadan
+  rotate: false
+  xy: 592, 295
+  size: 117, 154
+  orig: 117, 154
+  offset: 0, 0
+  index: -1
+heizhadan-guang
+  rotate: false
+  xy: 839, 805
+  size: 145, 182
+  orig: 145, 182
+  offset: 0, 0
+  index: -1
+heizhadan-guang1
+  rotate: false
+  xy: 709, 550
+  size: 145, 182
+  orig: 145, 182
+  offset: 0, 0
+  index: -1
+huoqiu
+  rotate: false
+  xy: 335, 38
+  size: 249, 145
+  orig: 249, 145
+  offset: 0, 0
+  index: -1
+suduxian
+  rotate: false
+  xy: 458, 734
+  size: 379, 253
+  orig: 379, 253
+  offset: 0, 0
+  index: -1
+wangzha-zi
+  rotate: false
+  xy: 410, 451
+  size: 244, 134
+  orig: 244, 134
+  offset: 0, 0
+  index: -1
+zhadan
+  rotate: false
+  xy: 2, 2
+  size: 274, 176
+  orig: 290, 191
+  offset: 8, 8
+  index: -1
