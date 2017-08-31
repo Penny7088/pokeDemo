@@ -64,14 +64,14 @@ GetGameScreenScaleW = function (b) {
     return b ? g_GetGameScreenScaleW : Math.max(g_GetGameScreenScaleW, 0);
 };
 
-var g_WidthToHeghtDelScale = 1.0;
-GetWidthToHeghtDelScale = function () {
-    return g_WidthToHeghtDelScale;
+var g_WidthToHeightDelScale = 1.0;
+GetWidthToHeightDelScale = function () {
+    return g_WidthToHeightDelScale;
 };
 
-var g_HeghtToWidthDelScale = 1.0;
-GetHeghtToWidthDelScale = function () {
-    return g_HeghtToWidthDelScale;
+var g_HeightToWidthDelScale = 1.0;
+GetHeightToWidthDelScale = function () {
+    return g_HeightToWidthDelScale;
 };
 
 
@@ -141,7 +141,7 @@ cc.game.onStart = function () {
         } else if (screenWidth / designWidth > screenHeight / designHeight) {
             cc.view.setDesignResolutionSize(designWidth, designHeight, cc.ResolutionPolicy.FIXED_WIDTH);//固定宽度cc.ResolutionPolicy.FIXED_HEIGHT
         } else {
-            g_WidthToHeghtDelScale = (screenWidth / designWidth) / (screenHeight / screenHeight);
+            g_WidthToHeightDelScale = (screenWidth / designWidth) / (screenHeight / screenHeight);
             cc.view.setDesignResolutionSize(designWidth, designHeight, cc.ResolutionPolicy.FIXED_HEIGHT);//固定高度cc.ResolutionPolicy.FIXED_HEIGHT
         }
     }

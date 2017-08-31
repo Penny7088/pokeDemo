@@ -22,15 +22,40 @@ var UIMainLogin = cc.Node.extend({
         var self = this;
         this.scheduleOnce(function (dt) {
             if (!cc.sys.isNative || cc.sys.OS_WINDOWS === cc.sys.os) {
-                // self._toEnter();
+                self._toEnter();
             } else {
                 // self._toLoad();
-                // self._toEnter();
+                self._toEnter();
             }
         }, delayTime);
 
     }
 });
+
+UIMainLogin.prototype._toEnter = function () {
+    var self = this;
+    cc.log("====coming = in ====");
+    cc.loader.loadJs(["src/jsList.js"], function () {
+        cc.loader.loadJs(jsList, function () {
+            if (!cc.sys.isNative || cc.sys.os === cc.sys.OS_WINDOWS) {
+                cc.log("windows===========");
+            } else {
+                if (self._am) gd_version = self._am.getLocalManifest().getVersion();
+            }
+
+            cc.LoaderScene.preload(g_resources, function () {
+                if (gb_localData.audioMusic) {
+                    cc.audioEngine.playMusic(g_mapAudio.back, true);
+                }
+
+                DC.init();
+
+                cc.director.runScene(newLogin.scene());
+            }, self);
+
+        });
+    });
+};
 
 UIMainLogin.scene = function () {
     var scene = new cc.Scene();
