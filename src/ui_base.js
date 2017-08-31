@@ -44,25 +44,30 @@ UIBase = cc.Node.extend({
     }
 });
 
-UIBase.create = function(){
+UIBase.create = function () {
     return new UIBase();
 };
 
+/**
+ * 设置消费事件
+ * @param swallow
+ */
 UIBase.prototype.setSwallowTouches = function (swallow) {
-  if(this._touchListener){ //this._touchListener  只要这个值不是null,undefined和0  就是TRUE
-      this._touchListener.setSwallowTouches(swallow);
-  }
+    if (this._touchListener) { //this._touchListener  只要这个值不是null,undefined和0  就是TRUE
+        this._touchListener.setSwallowTouches(swallow);
+    }
 };
 
+
 UIBase.prototype.isSwallowTouches = function () {
-  if(this._touchListener){
+    if (this._touchListener) {
         return this._touchListener.isSwallowTouches();
-  }
-  return false;
+    }
+    return false;
 };
 
 UIBase.prototype.onExit = function () {
-    if(this._touchEnabled){
+    if (this._touchEnabled) {
         this.setTouchEnable(false);
     }
 
@@ -78,5 +83,27 @@ UIBase.prototype.onTouchBegan = function (touch, event) {
     return true;
 };
 
-UIBase.prototype.onTouchMoved = function (touch, event) {};
-UIBase.prototype.onTouchEnded = function (touch, event) {};
+UIBase.prototype.onTouchMoved = function (touch, event) {
+};
+UIBase.prototype.onTouchEnded = function (touch, event) {
+};
+
+UIVRButton = UIBase.extend({
+    isToScale: false,
+    _touchEventSelector:null,
+    _touchEventListener:null,
+    _touchEventEndedBC : null,
+    _longEventSelector : null,
+    _longEventListener : null,
+    _touchToChild : 2,
+    _lock : false,
+    _callCount: 0,
+    _curCallCount : 0,
+    _touchRect : null,
+    _msg:"",
+    _toScaleAnim : true
+});
+
+UIVRButton.create = function () {
+    return new UIVRButton();
+};
