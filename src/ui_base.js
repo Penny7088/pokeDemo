@@ -14,16 +14,15 @@ UIBase = cc.Node.extend({
      * @param touchPriority  触摸优先级
      * @param bSwallow      是否消费事件
      */
-    setTouchEnable: function (enable, touchPriority, bSwallow) {
-        //默认消费
+    setTouchEnabled: function (enable, touchPriority, bSwallow) {
         bSwallow = (undefined === bSwallow) ? true : bSwallow;
-        //基类的this._touchEnable = false
         if (this._touchEnabled === enable) {
             return;
         }
         this._touchEnabled = enable;
+        //LocalPlayEffect(g_mapAudio.button);
         if (this._touchEnabled) {
-            if (!this._touchListener) {
+            if (!this._touchListener)
                 this._touchListener = cc.EventListener.create({
                     event: cc.EventListener.TOUCH_ONE_BY_ONE,
                     swallowTouches: bSwallow,
@@ -31,15 +30,13 @@ UIBase = cc.Node.extend({
                     onTouchMoved: this.onTouchMoved.bind(this),
                     onTouchEnded: this.onTouchEnded.bind(this)
                 });
-            }
-
             if (undefined === touchPriority || 0 === touchPriority)
-                cc.EventListener.addListener(this._touchListener, this);
+                cc.eventManager.addListener(this._touchListener, this);
             else
-                cc.EventListener.addListener(this._touchListener, touchPriority);
+                cc.eventManager.addListener(this._touchListener, touchPriority);
 
         } else {
-            cc.EventListener.removeListener(this._touchListener);
+            cc.eventManager.removeListener(this._touchListener);
         }
     }
 });
@@ -90,20 +87,201 @@ UIBase.prototype.onTouchEnded = function (touch, event) {
 
 UIVRButton = UIBase.extend({
     isToScale: false,
-    _touchEventSelector:null,
-    _touchEventListener:null,
-    _touchEventEndedBC : null,
-    _longEventSelector : null,
-    _longEventListener : null,
-    _touchToChild : 2,
-    _lock : false,
+    _touchEventSelector: null,
+    _touchEventListener: null,
+    _touchEventEndedBC: null,
+    _longEventSelector: null,
+    _longEventListener: null,
+    _touchToChild: 2,
+    _lock: false,
     _callCount: 0,
-    _curCallCount : 0,
-    _touchRect : null,
-    _msg:"",
-    _toScaleAnim : true
+    _curCallCount: 0,
+    _touchRect: null,
+    _msg: "",
+    _toScaleAnim: true
 });
 
 UIVRButton.create = function () {
     return new UIVRButton();
 };
+
+UIVRButton.prototype.addTouchEventListener = function (selector, target, callCount) {
+    _callCount = callCount === undefined ? 0 : _callCount;
+    this._callCount = _callCount;
+    this._touchEventSelector = selector;
+    this._touchEventListener = target;
+};
+
+UIVRButton.prototype.addTouchEndedBC = function (bc) {
+    this._touchEventEndedBC = bc;
+};
+
+UIVRButton.prototype.setTouchRect = function (touchRect) {
+    this._touchRect = touchRect;
+};
+
+UIVRButton.prototype.setToScaleAnim = function (scaleAnim) {
+    this._toScaleAnim = scaleAnim;
+};
+
+UIVRButton.prototype.setTouchToChild = function (toChild) {
+    this._touchToChild = toChild;
+};
+
+UIVRButton.prototype.toTouchScale = function () {
+    this.isToScale = true;
+    if (this._toScaleAnim) {
+        this.setScale(1.1);
+    }
+};
+
+UIVRButton.prototype.endTouchScale = function () {
+    this.isToScale = false;
+    if (this._toScaleAnim) {
+        this.stopAllActions();
+        var scaleTo = cc.scaleTo(0.05, 1, 1);
+        this.runAction(scaleTo);
+    }
+};
+
+/**
+ * 是否选中
+ * @param node
+ * @param ptTouch
+ * @param toChild
+ * @returns {boolean}
+ */
+UIVRButton.prototype.isTouchTo = function (node, ptTouch, toChild) {
+    if (0 < toChild && this.isVisible()) {
+        if (this._touchRect) {
+            var ptNode = node.convertToNodeSpace(ptTouch);
+            if (cc.rectContainsPoint(this._touchRect, ptNode)) {
+                return true;
+            }
+        } else {
+            var ptNode = node.convertToNodeSpace(ptTouch);
+            var size = node.getContentSize();
+            var rtNode = cc.rect(0, 0, size.width, size.height);
+
+            if (cc.rectContainsPoint(rtNode, ptNode)) {
+                return true;
+            } else {
+                var children = node.getChildren();
+                for (var i in children) {
+                    if (this.isTouchTo(children[i], ptTouch, toChild - 1)) {
+                        return true;
+                    }
+                }
+            }
+
+        }
+    }
+    return false;
+};
+
+/**
+ * 长按
+ * @param _selector
+ * @param _listener
+ */
+UIVRButton.prototype.setLongEventListener = function (_selector, _listener) {
+    this._longEventSelector = _selector;
+    this._longEventListener = _listener;
+    this.setToScaleAnim(false);
+};
+
+UIVRButton.prototype._longEventCall = function (dt) {
+    if (this._longEventListener && this._longEventSelector) {
+        this._longEventSelector.call(this._longEventListener, this, ccui.Widget.TOUCH_BEGAN);
+    }
+};
+
+/**
+ * onTouchBegan 触摸开始事件
+ * @param touch
+ * @param event
+ */
+UIVRButton.prototype.onTouchBegan = function (touch, event) {
+    // 获取当前触摸点相对于按钮所在的坐标
+    var locationInNode = touch.getLocation();
+    //是否触摸到
+    if (this.isTouchTo(this, locationInNode, this._touchToChild)) {
+        this.toTouchScale();
+        if (!this.isSwallowTouches()) {
+            this.setSwallowTouches(true);
+        }
+
+        if (this._longEventListener && this._longEventSelector) {
+            this.unschedule(this._longEventCall);
+            this.scheduleOnce(this._longEventCall, 0.3);
+        } else {
+            if (this._touchEventSelector && this._touchEventListener) {
+                this._touchEventListener.call(this._touchEventListener, this, ccui.Widget.TOUCH_BEGAN);
+            }
+        }
+
+    } else {
+        if (this.isSwallowTouches()) {
+            this.setSwallowTouches(false);
+        }
+    }
+    return true;
+};
+
+/**
+ * 触摸移动时触发
+ * @param touch
+ * @param event
+ */
+UIVRButton.prototype.onTouchMoved = function (touch, event) {
+    if (this.isToScale) {
+        var locationInNode = touch.getLocation();
+        if (this.isTouchTo(this, locationInNode, this._touchToChild)) {
+            if (this._touchEventSelector && this._touchEventListener) {
+                this._touchEventSelector.call(this._touchEventListener, this, ccui.Widget.TOUCH_MOVED);
+            }
+        } else {
+            this.endTouchScale();
+            if (this._touchEventSelector && this._touchEventListener) {
+                this._touchEventSelector.call(this._touchEventListener, this, ccui.Widget.TOUCH_CANCELED);
+            }
+        }
+    }
+};
+
+/**
+ * 触摸结束事件
+ * @param touch
+ * @param event
+ */
+UIVRButton.prototype.onTouchEnded = function (touch, event) {
+
+    if (0 < this._callCount && this._callCount <= this._curCallCount) {
+        return;
+    }
+
+    if (this.isToScale) {
+        var locationInNode = touch.getLocation();
+        if (!this._lock && this.isTouchTo(this, locationInNode, this._touchToChild)) {
+            LocalPlayEffect(g_mapAudio.button);
+            this._lock = true;
+            this._curCallCount++;
+            this.endTouchScale();
+            if (this._touchEventEndedBC) {
+                this._touchEventEndedBC(this);
+            }
+
+            if (this._touchEventSelector && this._touchEventListener) {
+                this._touchEventSelector.call(this._touchEventListener, this, ccui.Widget.TOUCH_ENDED);
+            }
+            this._lock = false;
+        }
+    }
+
+    if (this._longEventSelector && this._longEventListener) {
+        this.endTouchScale();
+        this.unschedule(this._longEventCall);
+        this._longEventSelector.call(this._longEventListener, this, ccui.Widget.TOUCH_ENDED);
+    }
+};
+

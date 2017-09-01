@@ -36,9 +36,28 @@ var newLogin = UIBase.extend({
             y: winSize.height / 2 + 165
         });
         this.addChild(titleNode);
+
+        //TODO 目前这块可省略 调用了IOS的方法
+        var isWXAppInstalled = true;
+        // if (cc.sys.os == cc.sys.OS_IOS) {
+        //     isWXAppInstalled = jsb.reflection.callStaticMethod("AppController", "isWXAppInstalled");
+        // }
+
+        if (isWXAppInstalled) {
+            //账号登录
+            var accontNode = UIVRButton.create();
+            var account_sprite = cc.Sprite.create("res/new_hall/login/accountloginbt.png");
+            accontNode.addChild(account_sprite);
+            accontNode.setTouchEnabled(true, this._touchPriority - 1);
+            accontNode.addTouchEventListener(this.onButtonAccountLogin, this);
+            accontNode.attr({
+                x: winSize.width / 2 - 210,
+                y: winSize.height / 2
+            });
+            this.addChild(accontNode);
+        }
     }
 });
-
 
 var newLoginUIIn = null;
 newLogin.scene = function (errorText) {
@@ -46,4 +65,16 @@ newLogin.scene = function (errorText) {
     newLoginUIIn = new newLogin(errorText);
     scene.addChild(newLoginUIIn);
     return scene;
+};
+
+newLogin.prototype.onExit = function () {
+    UIBase.prototype.onExit().call(this);
+    newLoginUIIn = null;
+};
+
+newLogin.prototype.onButtonAccountLogin = function (sender, type) {
+    if(ccui.Widget.TOUCH_ENDED === type){
+        cc.log("onButtonAccountLogin");
+
+    }
 };
