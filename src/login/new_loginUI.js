@@ -178,8 +178,17 @@ var accountLogin = UIBase.extend({
         if (DC.m_platform !== cc.sys.DESKTOP_BROWSER) {
             this.text_box1.setTouchEnabled(false);
         }
-
+        //下拉框
         this.pullDownButton();
+
+        var passWDBG = new cc.Scale9Sprite("res/new_hall/login/textbg.png");
+        passWDBG.setContentSize(cc.size(width, height));
+        passWDBG.setPreferredSize(cc.size(width, height));
+        passWDBG.attr({
+            x: 0,
+            y: -40
+        });
+        this.addChild(passWDBG);
 
 
         var registerbuttonNode = UIVRButton.create();
@@ -287,7 +296,6 @@ var accountLogin = UIBase.extend({
                     x: -350,
                     y: -135
                 });
-
             }
         }
     }
