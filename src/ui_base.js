@@ -116,8 +116,6 @@ UIVRButton.prototype.addTouchEventListener = function (selector, target, callCou
     this._callCount = _callCount;
     this._touchEventSelector = selector;
     this._touchEventListener = target;
-    cc.log("target:" + target.toString());
-    cc.log("selector:" + selector.toString());
 };
 
 UIVRButton.prototype.addTouchEndedBC = function (bc) {
@@ -198,7 +196,7 @@ UIVRButton.prototype.setLongEventListener = function (_selector, _listener) {
     this.setToScaleAnim(false);
 };
 
-UIVRButton.prototype._longEventCall = function (dt) {
+UIVRButton.prototype._longEventCell = function (dt) {
     if (this._longEventListener && this._longEventSelector) {
         this._longEventSelector.call(this._longEventListener, this, ccui.Widget.TOUCH_BEGAN);
     }
@@ -220,8 +218,8 @@ UIVRButton.prototype.onTouchBegan = function (touch, event) {
         }
 
         if (this._longEventListener && this._longEventSelector) {
-            this.unschedule(this._longEventCall);
-            this.scheduleOnce(this._longEventCall, 0.3);
+            this.unschedule(this._longEventCell);
+            this.scheduleOnce(this._longEventCell, 0.3);
         } else {
             if (this._touchEventSelector && this._touchEventListener) {
                 this._touchEventSelector.call(this._touchEventListener, this, ccui.Widget.TOUCH_BEGAN);
@@ -288,7 +286,7 @@ UIVRButton.prototype.onTouchEnded = function (touch, event) {
 
     if (this._longEventSelector && this._longEventListener) {
         this.endTouchScale();
-        this.unschedule(this._longEventCall);
+        this.unschedule(this._longEventCell);
         this._longEventSelector.call(this._longEventListener, this, ccui.Widget.TOUCH_ENDED);
     }
 };

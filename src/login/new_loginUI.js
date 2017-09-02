@@ -178,6 +178,7 @@ var accountLogin = UIBase.extend({
         if (DC.m_platform !== cc.sys.DESKTOP_BROWSER) {
             this.text_box1.setTouchEnabled(false);
         }
+
         this.pullDownButton();
 
 
@@ -221,7 +222,7 @@ var accountLogin = UIBase.extend({
             BG = cc.Sprite.create("res/new_hall/login/xiala.png");
         }
         node.addChild(BG);
-        node.setTouchEnabled(true);
+        node.setTouchEnabled(true, this._touchPriority - 1);
         node.addTouchEventListener(this.onButtonUpDownPull, this);
         node.setTouchRect(cc.rect(-50, -50, 100, 100));
         node.attr({
@@ -241,12 +242,54 @@ var accountLogin = UIBase.extend({
         if (ccui.Widget.TOUCH_ENDED === type) {
             RemoveWindow("accountLoginUI");
             cc.log("onButtonForget");
-
+            //TODO
 
         }
     },
     onButtonUpDownPull: function (sender, type) {
         cc.log("onButtonUpDownPull");
+        if (ccui.Widget.TOUCH_ENDED === type) {
+            if (this._open) {
+                this._open = false;
+                if (this.text_box2) this.text_box2.setVisible(true);
+                var moreNode = this.getChildByName("MoreAccount");
+                if (moreNode) moreNode.removeFromParent(true);
+                this.pullDownButton();
+            } else {
+                this._open = true;
+                if (this.text_box2) this.text_box2.setVisible(false);
+                this.pullDownButton();
+                var node = cc.Node.create();
+                var selectAccountBG = new cc.Scale9Sprite("res/new_hall/login/textbg.png");
+                selectAccountBG.setContentSize(cc.size(730, 290));
+                selectAccountBG.setPreferredSize(cc.size(730, 290));
+                node.attr({
+                    x: 0,
+                    y: -110
+                });
+                node.addChild(selectAccountBG);
+                this.addChild(node, 1, "MoreAccount");
+                var baseData = cc.sys.localStorage.getItem("baseAccountData");
+                if (baseData) {
+                    this._baseAccountData = JSON.parse(baseData);
+                }
+
+                //TODO Uncaught TypeError: this._dataSource.numberOfCellsInTableView is not a function 这里报错
+                this.tableView = new cc.TableView(this, cc.size(700, 260));
+                this.tableView.setDirection(cc.SCROLLVIEW_DIRECTION_VERTICAL);
+                this.tableView.setVerticalFillOrder(cc.TABLEVIEW_FILL_TOPDOWN);
+                this.tableView.setDelegate(this);
+                node.addChild(this.tableView, 1);
+                this.tableView.setTouchEnabled(true);
+                // this.tableView.setTouchEnabledEx(true, this._touchPriority - 2, true);
+                this.tableView.reloadData();
+                this.tableView.attr({
+                    x: -350,
+                    y: -135
+                });
+
+            }
+        }
     }
 });
 
@@ -263,6 +306,72 @@ accountLogin.create = function () {
 accountLogin.prototype.onButtonclose = function () {
     this.removeFromParent(true);
 };
+
+// accountLogin.prototype.onButtonUpDownPull = function (serder, type) {
+//     cc.log("onButtonUpDownPull");
+//     if (ccui.Widget.TOUCH_ENDED === type) {
+//         if (this._open) {
+//             this._open = false;
+//             if (this.text_box2) this.text_box2.setVisible(true);
+//             var moreNode = this.getChildByName("MoreAccount");
+//             if (moreNode) moreNode.removeFromParent(true);
+//             this.pullDownButton();
+//         } else {
+//             this._open = true;
+//             if (this.text_box2) this.text_box2.setVisible(false);
+//             this.pullDownButton();
+//             var node = cc.Node.create();
+//             var selectAccountBG = new cc.Scale9Sprite("res/new_hall/login/textbg.png");
+//             selectAccountBG.setContentSize(cc.size(730, 290));
+//             selectAccountBG.setPreferredSize(cc.size(730, 290));
+//             node.attr({
+//                 x: 0,
+//                 y: -110
+//             });
+//             node.addChild(selectAccountBG);
+//             this.addChild(node, 1, "MoreAccount");
+//             var baseData = cc.sys.localStorage.getItem("baseAccountData");
+//             if (baseData) {
+//                 this._baseAccountData = JSON.parse(baseData);
+//             }
+//
+//             this.tableView = new cc.TableView(this, cc.size(700, 260));
+//             this.tableView.setDirection(cc.SCROLLVIEW_DIRECTION_VERTICAL);
+//             this.tableView.setVerticalFillOrder(cc.TABLEVIEW_FILL_TOPDOWN);
+//             this.tableView.setDelegate(this);
+//             node.addChild(this.tableView, 1);
+//             this.tableView.setTouchEnabled(true);
+//             // this.tableView.setTouchEnabledEx(true, this._touchPriority - 2, true);
+//             this.tableView.reloadData();
+//             this.tableView.attr({
+//                 x: -350,
+//                 y: -135
+//             });
+//
+//         }
+//     }
+// };
+//
+// accountLogin.prototype.pullDownButton = function () {
+//     cc.log("pullDownButton=======");
+//     var node = this.getChildByName("pullDownButton");
+//     if (node) node.removeFromParent(true);
+//     node = UIVRButton.create();
+//     if (this._open) {
+//         var BG = cc.Sprite.create("res/new_hall/login/shangla.png");
+//     } else {
+//         var BG = cc.Sprite.create("res/new_hall/login/xiala.png");
+//     }
+//     node.addChild(BG);
+//     node.setTouchEnabled(true, this._touchPriority - 1);
+//     node.addTouchEventListener(this.onButtonUpDownPull, this);
+//     node.setTouchRect(cc.rect(-50, -50, 100, 100));
+//     node.attr({
+//         x: 300,
+//         y: 80
+//     });
+//     this.addChild(node, 0, "pullDownButton");
+// };
 
 var registerAccount = UIBase.extend({});
 
