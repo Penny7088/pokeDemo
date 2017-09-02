@@ -65,7 +65,7 @@ UIBase.prototype.isSwallowTouches = function () {
 
 UIBase.prototype.onExit = function () {
     if (this._touchEnabled) {
-        this.setTouchEnable(false);
+        this.setTouchEnabled(false);
     }
 
     // if(-1 !== this.__POPTag){
@@ -105,11 +105,19 @@ UIVRButton.create = function () {
     return new UIVRButton();
 };
 
+/**
+ * 添加触摸监听器
+ * @param selector
+ * @param target
+ * @param callCount
+ */
 UIVRButton.prototype.addTouchEventListener = function (selector, target, callCount) {
     _callCount = callCount === undefined ? 0 : _callCount;
     this._callCount = _callCount;
     this._touchEventSelector = selector;
     this._touchEventListener = target;
+    cc.log("target:" + target.toString());
+    cc.log("selector:" + selector.toString());
 };
 
 UIVRButton.prototype.addTouchEndedBC = function (bc) {
@@ -216,7 +224,7 @@ UIVRButton.prototype.onTouchBegan = function (touch, event) {
             this.scheduleOnce(this._longEventCall, 0.3);
         } else {
             if (this._touchEventSelector && this._touchEventListener) {
-                this._touchEventListener.call(this._touchEventListener, this, ccui.Widget.TOUCH_BEGAN);
+                this._touchEventSelector.call(this._touchEventListener, this, ccui.Widget.TOUCH_BEGAN);
             }
         }
 
@@ -285,3 +293,47 @@ UIVRButton.prototype.onTouchEnded = function (touch, event) {
     }
 };
 
+/**
+ * popWindow
+ * @type {Array}
+ */
+var g_vrPOPWindowInfo = [];
+PopWindow = function (nodeObj, scale) {
+    //默认1
+    scale = undefined === scale ? 1 : scale;
+    //返回当前正在运行的场景.导演类同一时间只能运行一个场景.
+    var runningScene = cc.director.getRunningScene();
+    var backColorLayer = runningScene.getChildByName("backColorLayer");
+    var ZOrder = (g_vrPOPWindowInfo.length + 99 ) * 2;
+    if (backColorLayer) {
+        backColorLayer.setLocalZOrder(ZOrder);
+        backColorLayer.setVisible(true);
+    } else {
+        var winSize = cc.director.getWinSize();
+        var layerColor = new cc.LayerColor(cc.color(0, 0, 0, 102), winSize.width, winSize.height);
+        runningScene.addChild(layerColor, ZOrder, "backColorLayer");
+    }
+
+    runningScene.addChild(nodeObj, ZOrder + 1);
+    nodeObj.setScale(0.0);
+    nodeObj.runAction(cc.sequence(cc.scaleTo(0.2, scale),
+        cc.scaleTo(0.06, 0.97 * scale),
+        cc.scaleTo(0.06, scale)));
+
+    var date = new Date();
+    var time = date.getTime();
+    nodeObj.__POPTag = time;
+    g_vrPOPWindowInfo.push({POPTag: time, ZOrder: ZOrder});
+
+};
+
+/**
+ * 移除pop
+ * @param name
+ * @constructor
+ */
+RemoveWindow = function (name) {
+    var runningScene = cc.director.getRunningScene();
+    var node = runningScene.getChildByName(name);
+    if (node) node.removeFromParent(true);
+};
