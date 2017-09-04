@@ -146,6 +146,7 @@ var accountLogin = UIBase.extend({
         });
         this.addChild(titleNode);
 
+        //账号背景
         var textBG = new cc.Scale9Sprite("res/new_hall/login/textbg.png");
         var width = 730;
         var height = 88;
@@ -181,6 +182,7 @@ var accountLogin = UIBase.extend({
         //下拉框
         this.pullDownButton();
 
+        //.9密码图背景
         var passWDBG = new cc.Scale9Sprite("res/new_hall/login/textbg.png");
         passWDBG.setContentSize(cc.size(width, height));
         passWDBG.setPreferredSize(cc.size(width, height));
@@ -189,8 +191,27 @@ var accountLogin = UIBase.extend({
             y: -40
         });
         this.addChild(passWDBG);
+        this.text_box2 = new cc.EditBox(cc.size(600, 50), new cc.Scale9Sprite("res/setting/whitebg.png"));
+        this.text_box2.setInputFlag(cc.EDITBOX_INPUT_FLAG_SENSITIVE);
+        this.text_box2.setFontName("Helvetica");
+        this.text_box2.setFontSize(40);
+        this.text_box2.setColor(cc.color(90, 93, 98));
+        this.text_box2.setPlaceHolder("请输入密码");
+        this.text_box2.setPlaceholderFontName("Helvetica");
+        this.text_box2.setPlaceholderFontSize(40);
+        this.text_box2.setPlaceholderFontColor(cc.color(90, 93, 98));
+        this.text_box2.setMaxLength(40);
+        this.text_box2.setDelegate(this);
+        this.addChild(this.text_box2);
+        this.text_box2.attr({
+            x: -40,
+            y: -40
+        });
+        if (DC.m_platform !== cc.sys.DESKTOP_BROWSER) {
+            this.text_box2.setTouchEnabled(false);
+        }
 
-
+        //注册
         var registerbuttonNode = UIVRButton.create();
         var registerbg = cc.Sprite.create("res/new_hall/login/zhuce.png");
         registerbuttonNode.addChild(registerbg);
@@ -203,6 +224,19 @@ var accountLogin = UIBase.extend({
         });
         this.addChild(registerbuttonNode);
 
+        //登录按钮
+        var loginButton = UIVRButton.create();
+        var loginBG = cc.Sprite.create("res/new_hall/login/denglu.png");
+        loginButton.addChild(loginBG);
+        loginButton.setTouchEnabled(true, this._touchPriority - 1);
+        loginButton.addTouchEventListener(this.onLogin(), this);
+        loginButton.attr({
+            x: 190,
+            y: -130 + this._pianyi
+        });
+        this.addChild(loginButton);
+
+        //忘记密码
         var forgetButton = UIVRButton.create();
         var forgetBG = cc.Sprite.create("res/new_hall/login/forget.png");
         forgetButton.addChild(forgetBG);
@@ -239,14 +273,14 @@ var accountLogin = UIBase.extend({
             y: 80
         });
         this.addChild(node, 0, "pullDownButton");
-    },
+    },//注册回调
     onButtonregister: function (sender, type) {
         if (ccui.Widget.TOUCH_ENDED === type) {
             cc.log("onButtonregister");
             cc.director.runScene(new cc.TransitionFade(0.5, registerAccount.create()));
             RemoveWindow("accountLoginUI");
         }
-    },
+    },//忘记密码回调
     onButtonForget: function (serder, type) {
         if (ccui.Widget.TOUCH_ENDED === type) {
             RemoveWindow("accountLoginUI");
@@ -254,7 +288,10 @@ var accountLogin = UIBase.extend({
             //TODO
 
         }
-    },
+    },//登录回调
+    onLogin: function (sender, type) {
+
+    },//下拉回调
     onButtonUpDownPull: function (sender, type) {
         cc.log("onButtonUpDownPull");
         if (ccui.Widget.TOUCH_ENDED === type) {
@@ -278,6 +315,8 @@ var accountLogin = UIBase.extend({
                 });
                 node.addChild(selectAccountBG);
                 this.addChild(node, 1, "MoreAccount");
+                cc.sys.localStorage.setItem("baseAccountData", "15973077088");
+                cc.sys.localStorage.setItem("baseAccountData", "15963077089");
                 var baseData = cc.sys.localStorage.getItem("baseAccountData");
                 if (baseData) {
                     this._baseAccountData = JSON.parse(baseData);
